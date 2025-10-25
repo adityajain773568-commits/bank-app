@@ -44,7 +44,7 @@ public class Main {
 
 
                 case "4":
-                    transfer(scanner);
+                    transfer(scanner,bankService);
                     break;
 
                 case "5":
@@ -102,7 +102,15 @@ public class Main {
         System.out.println("Withdrawan");
     }
 
-    private static void transfer(Scanner scanner) {
+    private static void transfer(Scanner scanner,BankService bankService) {
+        System.out.println("From Account : ");
+        String from = scanner.nextLine().trim();
+        System.out.println("To Account : ");
+        String to = scanner.nextLine().trim();
+        System.out.println("What's the amount");
+        Double amount = scanner.nextDouble();
+        bankService.transfer(from,to,amount,"transfer");
+        System.out.println("Transferred Successfully");
     }
 
     private static void statement(Scanner scanner) {
