@@ -39,7 +39,7 @@ public class Main {
                     break;
 
                 case "3":
-                    withdraw(scanner);
+                    withdraw(scanner,bankService);
                     break;
 
 
@@ -93,7 +93,13 @@ public class Main {
 
     }
 
-    private static void withdraw(Scanner scanner) {
+    private static void withdraw(Scanner scanner,BankService bankService) {
+        System.out.println("Enter Account number : ");
+        String accountNumber = scanner.nextLine().trim();
+        System.out.println("Enter Amount : ");
+        Double amount = Double.valueOf(scanner.nextLine().trim());
+        bankService.withdraw(accountNumber,amount , "Withdrawal");
+        System.out.println("Withdrawan");
     }
 
     private static void transfer(Scanner scanner) {

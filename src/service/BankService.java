@@ -10,4 +10,6 @@ public interface BankService {
     List<Account> listAccount();
 
     void deposit(String accountNumber , Double amount , String depositNote);
+
+    void withdraw(String accountNumber, Double amount, String withdrawal);
 }
