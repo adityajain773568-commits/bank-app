@@ -47,15 +47,16 @@ public class Account {
         this.accountType = accountType;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Account account = (Account) o;
-        return Objects.equals(accountNumber, account.accountNumber) && Objects.equals(customerId, account.customerId);
+        return Objects.equals(customerId, account.customerId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(accountNumber, customerId);
+        return Objects.hashCode(customerId);
     }
 }

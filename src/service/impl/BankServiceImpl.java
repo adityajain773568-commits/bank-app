@@ -1,13 +1,16 @@
 package service.impl;
 
 import domain.Account;
+import domain.Customer;
 import domain.Transaction;
 import domain.Type;
 import repository.AccountRepository;
+import repository.CustomerRepository;
 import repository.TransactionRepository;
 import service.BankService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -15,15 +18,17 @@ import java.util.UUID;
 public class BankServiceImpl implements BankService {
     private final AccountRepository accountRepository = new AccountRepository();
     private final TransactionRepository transactionRepository = new TransactionRepository();
+    private final CustomerRepository customerRepository = new CustomerRepository();
     @Override
     public String openAccount(String name, String email, String accountType) {
         String customerId = UUID.randomUUID().toString();
 //        String accountNumber = UUID.randomUUID().toString();
         String accountNumber = getAccountNumber();
         Account account = new Account(accountNumber,customerId, (double) 0, accountType);
-
+        Customer customer  = new Customer(customerId,name,email);
         //save
         accountRepository.save(account);
+        customerRepository.save(customer);
         return accountNumber;
     }
 
@@ -71,7 +76,27 @@ public class BankServiceImpl implements BankService {
             throw new RuntimeException("Sender's didn't have this much amount ! ");
         }
 
-        
+    }
+
+    @Override
+    public List<Transaction> getStatement(String accNumber) {
+        Account account = accountRepository.findByNumber(accNumber).orElseThrow(() -> new RuntimeException("Account Not found" + accNumber));
+        return transactionRepository.getAll(account);
+    }
+
+    @Override
+    public List<Account> searchAccountsByCustomerName(String customerName) {
+        String query = ((customerName==null) ? " " : customerName.toLowerCase());
+        List<Account> result = new ArrayList<>();
+        for (Customer customer : customerRepository.findAll()){
+            if (customer.getName().toLowerCase().equals(query)){
+//                System.out.println("yess i m here" + query);
+                List<Account> accountList = accountRepository.findAccountByCustomerId(customer.getId());
+                result.addAll(accountList);
+            }
+        }
+        result.sort(Comparator.comparing(Account::getAccountNumber));
+        return result;
     }
 
     private String getAccountNumber() {

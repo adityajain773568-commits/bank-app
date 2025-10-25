@@ -1,6 +1,7 @@
 package app;
 
 import domain.Account;
+import domain.Transaction;
 import service.BankService;
 import service.impl.BankServiceImpl;
 
@@ -48,7 +49,7 @@ public class Main {
                     break;
 
                 case "5":
-                    statement(scanner);
+                    statement(scanner,bankService);
                     break;
 
                 case "6":
@@ -56,7 +57,7 @@ public class Main {
                     break;
 
                 case "7":
-                    searchAccounts(scanner);
+                    searchAccounts(scanner,bankService);
                     break;
 
                 default:
@@ -113,7 +114,11 @@ public class Main {
         System.out.println("Transferred Successfully");
     }
 
-    private static void statement(Scanner scanner) {
+    private static void statement(Scanner scanner,BankService bankService) {
+        System.out.println("Account Number : ");
+        String accNumber = scanner.nextLine().trim();
+        List<Transaction> statements = bankService.getStatement(accNumber);
+        statements.forEach(t-> System.out.println("TransactionId = " + t.getId() + " | AccountType = " + t.getType() + " | Amount = " + t.getAmount() + " | TransactionTime =  " + t.getTimestamp() + " | TransactionNote = " + t.getNote()  ) );
     }
 
     private static void listAccounts(Scanner scanner , BankService bankService) {
@@ -124,8 +129,11 @@ public class Main {
 
     }
 
-    private static void searchAccounts(Scanner scanner) {
+    private static void searchAccounts(Scanner scanner,BankService bankService) {
+        System.out.println("Customer name contains : ");
+        String customerName = scanner.nextLine().trim();
+        bankService.searchAccountsByCustomerName(customerName).forEach(
+                (account)-> System.out.println(account.getAccountNumber() + " | " + account.getAccountType() + " | " + account.getBalance()));
     }
-
 
 }

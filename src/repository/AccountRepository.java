@@ -26,4 +26,16 @@ public class AccountRepository {
 
 
     }
+
+    public List<Account> findAccountByCustomerId(String id) {
+        List<Account> result = new ArrayList<>();
+        for (Account a : accountsByNumber.values()){
+//            System.out.println(id + "-------" + a.getCustomerId());
+            if (a.getCustomerId().equals(id)){
+                System.out.println("yes i matched with customer id " + id);
+                result.add(a);
+            }
+        }
+        return result;
+    }
 }
